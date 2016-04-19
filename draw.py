@@ -13,13 +13,13 @@ app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
-    return render_template('http://example.com/index.html')
+    return render_template('index.html')
 
 
 @app.route("http://example.com/draw.html", methods=['GET', 'POST'])
 def single():
     if request.method == 'GET':
-        return render_template('http://example.com/draw.html')
+        return render_template('draw.html')
     if request.method == 'POST':
         value = get_result()
         print value
