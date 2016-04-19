@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+    <title>Paint</title>
+    <style>
+        .button {
+            background-color: #6699CC;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 12px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 10px 10px 10px;
+            cursor: pointer;
+        }
+
+        .label_result {
+            margin: 30px 0px 0px 0px;
+        }
+
+        .result {
+            margin: 10px 0px 0px 0px;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <canvas id="canvas" width="256" height="256" style="border:1px solid #000000; margin: 50px 0px 0px 0px"></canvas>
+    <div>
+        <input id="clear" class="button" type=button value="Clear" onclick = "clearCanvas()">
+        <input id="trans" class="button" type=button value="Trans" onclick = "trans()">
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td><button style="background-color: #000000; height: 25px; width: 25px;" onclick="color('#000000')"></button>
+                <td><button style="background-color: #CC3333; height: 25px; width: 25px;" onclick="color('#CC3333')"></button>
+                <td><button style="background-color: #FF9900; height: 25px; width: 25px;" onclick="color('#FF9900')"></button>
+                <td><button style="background-color: #FFCC00; height: 25px; width: 25px;" onclick="color('#FFCC00')"></button>
+                <td><button style="background-color: #339966; height: 25px; width: 25px;" onclick="color('#339966')"></button>
+                <td><button style="background-color: #6699CC; height: 25px; width: 25px;" onclick="color('#6699CC')"></button>
+                <td><button style="background-color: #9999CC; height: 25px; width: 25px;" onclick="color('#9999CC')"></button>
+                <td><button style="background-color: #FFFFFF; height: 25px; width: 25px;" onclick="color('#FFFFFF')"></button>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <p class="label_result">
+            <font face="Verdana" size="5" color="#404040">Recognition Result</font>
+        </p>
+        <p class="result">
+            <font face="Verdana" size="5" color="#6699CC"><span id="result"></span></font>
+        </p>
+    </div>
+</center>
+</body>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var curX;
+    var curY;
+    var preX;
+    var preY;
+    var hold = false;
+    context.lineWidth = 40;
+    context.lineJoin = context.lineCap = 'round';
+    var a = [];
+
+    canvas.addEventListener('mousedown', function(evt) {
+        var mousePos = getMousePos(canvas, evt);
+        curX = mousePos.x;
+        curY = mousePos.y;
+        col = context.getImageData(curX, curY, 1, 1).data;
+        hold = true;
+
+        preX = curX;
+        preY = curY;
+        context.beginPath();
+        context.moveTo(preX, preY);
+    }, false);
+
+    canvas.addEventListener('mousemove', function(evt) {
+        var mousePos = getMousePos(canvas, evt);
+        if (hold) {
+            curX = mousePos.x;
+            curY = mousePos.y;
+            draw();
+        }
+    }, false);
+
+    canvas.addEventListener('mouseup', function(evt) {
+        hold = false;
+    }, false);
+
+    function clearCanvas() {
+        document.location.href="/draw.html";
+    }
+
+    function getMousePos(canvas, evt) {
+        if (evt.pageX != undefined && evt.pageY != undefined) {
+            var x = evt.pageX;
+		    var y = evt.pageY;
+	    }
+	    else {
+	        x = evt.clientX + document.body.scrollLeft +
+				document.documentElement.scrollLeft;
+		    y = evt.clientY + document.body.scrollTop +
+				document.documentElement.scrollTop;
+        }
+
+	    x -= canvas.offsetLeft;
+	    y -= canvas.offsetTop;
+        return {
+            x: x,
+            y: y
+        };
+    }
+
+    function draw() {
+        context.lineTo(curX, curY);
+        context.stroke();
+    }
+
+    function color(color_value){
+        context.strokeStyle = color_value;
+    }
+
+    function trans() {
+        for(var i = 0; i < canvas.height; i++) {
+            a[i] = [];
+            for(var j = 0; j < canvas.width; j++) {
+                if(context.isPointInStroke(j, i)) {
+                    a[i][j] = 1;
+                } else {
+                    a[i][j] = 0;
+                }
+            }
+        }
+        console.log(a.toString());
+        var data = JSON.stringify(a);
+        console.log(data);
+        $.post("/draw.html", { result: data }, function(data) {
+            $("#result").text(data);
+        });
+    }
+</script>
+</html>

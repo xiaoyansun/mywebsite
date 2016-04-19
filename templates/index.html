@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recognize</title>
+    <style>
+        .button {
+            background-color: #6699CC;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 12px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            margin: 50px 10px 10px 10px;
+            cursor: pointer;
+        }
+        .button2 {
+            background-color: #6699CC;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 12px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 10px 10px 10px;
+            cursor: pointer;
+        }
+
+        .subtitle {
+            margin: 150px 10px 10px 10px;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <p id="subtitle" class="subtitle">
+        <font face="Comic sans MS" size="10" color="#404040">Character Recognize</font>
+    </p>
+    <div>
+        <input id="single" class="button" type=button value="Single-Character" onclick = "single()">
+    </div>
+    <div>
+        <input id="multi" class="button2" type=button value="Multi-Character" onclick = "multi()">
+    </div>
+</center>
+</body>
+<script>
+    function single() {
+        window.location.href='draw.html';
+    }
+</script>
+</html>
