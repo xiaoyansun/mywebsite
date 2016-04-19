@@ -16,7 +16,7 @@ def main():
     return render_template('index.html')
 
 
-@app.route("http://example.com/draw.html", methods=['GET', 'POST'])
+@app.route("draw.html", methods=['GET', 'POST'])
 def single():
     if request.method == 'GET':
         return render_template('draw.html')
