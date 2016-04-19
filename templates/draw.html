@@ -95,7 +95,7 @@
     }, false);
 
     function clearCanvas() {
-        document.location.href="/draw.html";
+        document.location.href="http://example.com/draw.html";
     }
 
     function getMousePos(canvas, evt) {
@@ -141,7 +141,7 @@
         console.log(a.toString());
         var data = JSON.stringify(a);
         console.log(data);
-        $.post("/draw.html", { result: data }, function(data) {
+        $.post("http://example.com/draw.html", { result: data }, function(data) {
             $("#result").text(data);
         });
     }
